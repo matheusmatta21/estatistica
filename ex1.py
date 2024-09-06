@@ -1,10 +1,12 @@
 from array import array
 import numpy as np
 import statistics
+import matplotlib.pyplot as plt 
+import seaborn as sns
 
-sync = np.array([94, 84.9, 82.6, 69.5, 80.1, 79.6, 81.4, 77.8, 81.7, 78.8, 73.2, 87.9, 87.9, 93.5, 82.3, 79.3, 78.3, 71.6, 88.6, 74.6, 74.1, 80.6])
+sync = np.array([94, 84.9, 82.6, 69.5, 80.1, 79.6, 81.4, 77.8, 81.7, 78.8, 73.2, 87.9, 87.9, 93.5, 82.3, 79.3, 78.3, 71.6, 88.6, 74.6, 80.6])
 
-asyncr = np.array([77.1, 71.7, 91, 72.2, 74.8, 85.1, 67.6, 69.9, 75.3, 71.7, 65.7, 72.6, 71.5, 78.2, 78.2])
+asyncr = np.array([77.1, 71.7, 91, 72.2, 74.8, 85.1, 67.6, 69.9, 75.3, 71.7, 65.7, 72.6, 71.5, 78.2])
 
 #media (x) s -> sync | as -> Async:
 
@@ -58,5 +60,31 @@ print("moda asyncr:", mode_as) #se apagar o 71.7, a moda vira o primeiro element
 
 # se len(dados) == len(statistics.multimode(dados)) -> distribuicao amodal
 
+# desvio padrao
+
+dp1 = sync.std(ddof=1)
+dp2 = asyncr.std(ddof=1)
 
 
+# coeficiente de variacao sincrono e assincrono
+
+cvs = dp1 / me_s
+print("CVS:", cvs)
+cva = dp2 / me_as
+print("CVA:", cva)
+
+#histograma
+#evitar range sync.min e . max, arredondar os valores e colocar manualmente
+plt.hist(asyncr, 5, (65, 95)) #(dados , beans//divisoes -> tem que ser multiplo da diferenca do range para que o grafico seja bem plotado, range)
+plt.show()
+
+#boxplot
+sns.boxplot(asyncr)
+plt.show()
+
+sns.boxplot([sync, asyncr])
+plt.xticks([0,1], ['sync', 'asyncr'])
+plt.xlabel('work type')
+plt.ylabel('hours')
+plt.title('grafico')
+plt.show()

@@ -2,7 +2,10 @@ from array import array
 import numpy as np
 import statistics
 import matplotlib.pyplot as plt 
+import matplotlib.dates as mdates
+import scipy.stats as scp
 import seaborn as sns
+import pandas as pd
 
 sync = np.array([94, 84.9, 82.6, 69.5, 80.1, 79.6, 81.4, 77.8, 81.7, 78.8, 73.2, 87.9, 87.9, 93.5, 82.3, 79.3, 78.3, 71.6, 88.6, 74.6, 80.6])
 
@@ -41,6 +44,8 @@ Q3s = np.percentile(sync, 75) #tereceiro quartil esta exatamente em 75%
 Q1as = np.percentile(asyncr, 25) #primeiro quartil esta exatamente em 25%
 Q3as = np.percentile(asyncr, 75) #tereceiro quartil esta exatamente em 75%
 
+IQR = Q3s - Q1s #Interquartile Range, é uma métrica robusta para avaliar a dispersão central dos dados, subtraindo o 1º quartil do 3º quartil.
+
 print("primeiro quartil sync:", Q1s)
 print("terceiro quartil sync:", Q3s)
 print("primeiro quartil asyncr:", Q1as)
@@ -60,11 +65,20 @@ print("moda asyncr:", mode_as) #se apagar o 71.7, a moda vira o primeiro element
 
 # se len(dados) == len(statistics.multimode(dados)) -> distribuicao amodal
 
+print('amplitude: ', np.ptp(sync)) #amplitude: diferenca entre o valor max e o valor min 
+print('amplitude2: ', np.ptp(asyncr))
+
 # desvio padrao
 
 dp1 = sync.std(ddof=1)
 dp2 = asyncr.std(ddof=1)
 
+
+print('variancia data: ', sync.var(ddof=1)) # amostra, ddof=1 indica que está lidando com uma amostra (amostral) e não com a população.
+print('variancia data_2: ', sync.var(ddof=0))
+
+print('variancia2 data_2: ', asyncr.var(ddof=1)) # população (?)
+print('variancia2 data_2: ', asyncr.var(ddof=0))
 
 # coeficiente de variacao sincrono e assincrono
 
@@ -88,3 +102,89 @@ plt.xlabel('work type')
 plt.ylabel('hours')
 plt.title('grafico')
 plt.show()
+
+stock = pd.read_csv("stock_data.csv") #dataset que mostra um conjunto de dados de ações
+iris = pd.read_csv("Iris.csv") # O conjunto de dados Íris contém informações sobre 150 flores de íris, divididas em três espécies diferentes: Iris setosa, Iris versicolor e Iris virginica.
+
+print(iris.head())
+sns.boxplot(stock['Open'])
+plt.show()
+
+dados = stock
+x = dados['Open'].mean()
+ponto_corte = dados['Open'].std(ddof=1) * 3
+inf, sup = x - ponto_corte, x + ponto_corte
+outliers = dados['Open'][(dados['Open'] < inf) | (dados['Open'] > sup)]
+print(outliers) #Aqui você calcula outliers com base na regra de 3 desvios padrão da média
+
+
+
+stock['Date'] = pd.to_datetime(stock['Date'])
+sns.lineplot(data=stock, x='Date', y='High') #Plotam-se séries temporais com sns.lineplot() usando o preço mais alto (High) e o mais baixo (Low), com base nas datas.
+sns.lineplot(data=stock, x='Date', y='Low')
+plt.show()
+print(stock.head())
+
+x = iris['SepalLengthCm']
+y = iris['SepalWidthCm']
+# Coeficiente de correlação, saber o quanto uma variável está relacionada uma com a outra
+print(scp.spearmanr(x, y)) # assimétrico, não paramétrico
+# scp.pearsonr(x,y) -> teste paramétrico (dentro de certo parâmetro), todas as variáveis precisam ter distribuição normal
+
+sns.scatterplot(data=iris, x='SepalLengthCm', y='SepalWidthCm') #Gera-se um gráfico de dispersão entre comprimento e largura das sépalas.
+plt.show()
+sns.boxplot([x,y])
+plt.show()
+
+
+tipo_e_tamanho = ['SepalLengthCm', 'SepalWidthCm', 'PetalLengthCm', 'PetalWidthCm']
+
+# Filtra pelo nome da espécie
+iris_setosa = iris[iris['Species'] == 'Iris-setosa']
+
+def process_iris_data(iris, species, x_col, y_col): #Essa função processa dados de uma determinada espécie de iris e exibe gráficos de dispersão e correlações de Pearson.
+    # Filtra os dados pela espécie
+    iris_species = iris[iris['Species'] == species]
+    
+    # Extrai os valores de x e y
+    x = iris_species[x_col]
+    y = iris_species[y_col]
+    
+    # Cria o gráfico de dispersão
+    sns.scatterplot(data=iris_species, x=x_col, y=y_col)
+    
+    # Calcula a correlação de Pearson
+    correlation, p_value = scp.pearsonr(x, y)
+    print(f"Correlação de Pearson entre {x_col} e {y_col} para {species}: {correlation} (p-value: {p_value})")
+    
+    # Exibe o gráfico
+    plt.show()
+
+    # Usando a função para vários pares de colunas e espécies
+columns_pairs = [
+    ('SepalLengthCm', 'SepalWidthCm'),
+    ('PetalLengthCm', 'PetalWidthCm'),
+    ('SepalLengthCm', 'PetalLengthCm'),
+    ('SepalLengthCm', 'PetalWidthCm'),
+    ('SepalWidthCm', 'PetalLengthCm'),
+    ('SepalWidthCm', 'PetalWidthCm')
+]
+
+species_list = ['Iris-setosa', 'Iris-versicolor', 'Iris-virginica']
+
+# Loop para processar todas as combinações de espécies e pares de colunas
+for species in species_list:
+    for x_col, y_col in columns_pairs:
+        process_iris_data(iris, species, x_col, y_col)
+
+def heat_map(species):
+    name_specie = iris[iris['Species'] == species]
+    iris_specie = name_specie.drop(columns=['Id', 'Species'])
+    iris_specie.head()
+    cormax = iris_specie.corr()
+    print(cormax)
+    sns.heatmap(cormax, annot=True)
+    plt.show()
+
+for specie in species_list:
+    heat_map(specie)

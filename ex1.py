@@ -148,11 +148,11 @@ print(outliers) #Aqui você calcula outliers com base na regra de 3 desvios padr
 # plt.show()
 # print(stock.head())
 
-# x = iris['SepalLengthCm']
-# y = iris['SepalWidthCm']
-# # Coeficiente de correlação, saber o quanto uma variável está relacionada uma com a outra
-# print(scp.spearmanr(x, y)) # assimétrico, não paramétrico
-# # scp.pearsonr(x,y) -> teste paramétrico (dentro de certo parâmetro), todas as variáveis precisam ter distribuição normal
+x = iris['SepalLengthCm']
+y = iris['SepalWidthCm']
+# Coeficiente de correlação, saber o quanto uma variável está relacionada uma com a outra
+print(scp.spearmanr(x, y)) # assimétrico, não paramétrico
+# scp.pearsonr(x,y) -> teste paramétrico (dentro de certo parâmetro), todas as variáveis precisam ter distribuição normal
 
 # sns.scatterplot(data=iris, x='SepalLengthCm', y='SepalWidthCm') #Gera-se um gráfico de dispersão entre comprimento e largura das sépalas.
 # plt.show()

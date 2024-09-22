@@ -115,7 +115,7 @@ x = dados['Open'].mean()
 ponto_corte = dados['Open'].std(ddof=1) * 3
 inf, sup = x - ponto_corte, x + ponto_corte
 outliers = dados['Open'][(dados['Open'] < inf) | (dados['Open'] > sup)]
-print(outliers) #Aqui você calcula outliers com base na regra de 3 desvios padrão da média
+print('outliers', outliers) #Aqui você calcula outliers com base na regra de 3 desvios padrão da média
 
 
 

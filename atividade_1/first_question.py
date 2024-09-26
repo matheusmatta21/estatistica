@@ -4,24 +4,28 @@ import pandas as pd
 
 iris = pd.read_csv('Iris.csv')
 
+species_list = ["Iris-setosa", "Iris-versicolor", "Iris-virginica"]
+
+#Essa função retorna a espécie desejada 
+
 def get_specie(specie : str): return iris[iris['Species'] == specie]
+
+#Essa função retorna os comprimentos da pétala da espécie desejada
 
 def get_petal_lenght_specie(specie : str): return iris[iris['Species'] == specie]['PetalLengthCm']
 
+#Essa função retorna a média dos comprimentos da pétala da espécie desejada
+
 def get_mean_petal_length(specie : str): return get_petal_lenght_specie(specie).mean()
+
+#Essa função cria e mostra um gráfico boxplot com os dados desejados
 
 def do_boxplot(data):
     sns.boxplot(data)
     plt.show()
 
-# print('mean: ', iris_setosa_petal_length_mean) #mean:  1.464
-print('mean iris-setosa: ', get_mean_petal_length('Iris-setosa'))
-do_boxplot(get_petal_lenght_specie('Iris-setosa'))
+#Execução principal do programa, que percorre todas as espécies e imprime a média dos comprimentos da pétala e o gráfico para cada espécie
 
-# print('mean: ', iris_versicolor_petal_length_mean) #mean:  4.26
-print('mean iris-versicolor: ', get_mean_petal_length('Iris-versicolor'))
-do_boxplot(get_petal_lenght_specie('Iris-versicolor'))
-
-# print('mean: ', iris_virginica_petal_length_mean) #mean:  5.5520000000000005
-print('mean iris-virginica: ', get_mean_petal_length('Iris-virginica'))
-do_boxplot(get_petal_lenght_specie('Iris-virginica'))
+for specie in species_list:
+    print(f'média dos comprimentos da pétala para a espécie {specie}: {get_mean_petal_length(specie)}')
+    do_boxplot(get_petal_lenght_specie(specie))

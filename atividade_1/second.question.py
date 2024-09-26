@@ -51,7 +51,7 @@ def process_iris_data(iris, species, x_col, y_col):
     # Cria e mostra o gráfico de dispersão
     show_scatterplot(iris_species, x_col, y_col)
 
-#Execução principal do programa
+#Execução principal do programa, onde columns_list[0] corresponde ao comprimento da sépala e columns_list[1] corresponde ao comprimento da pétala. 
 
 for specie in species_list:
     print(f'\nCorrelação entre {columns_list[0]} e {columns_list[1]} em relação à especie {specie}: \n')

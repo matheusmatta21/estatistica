@@ -24,11 +24,11 @@ GRUPO_C = np.array([6, 8, 7, 9, 7])
 
 def teste_hipotese(p_value): return "Reiejtar H0" if p_value < 0.05 else "Nao rejeitar h0"
 
-p_value_A_shapiro = scp.shapiro(GRUPO_A).pvalue #0.8263285160064697
+p_value_A_shapiro = scp.shapiro(GRUPO_A).pvalue #0.4211485683917999
 print(p_value_A_shapiro)
-p_value_B_shapiro = scp.shapiro(GRUPO_B).pvalue #0.9636706709861755
+p_value_B_shapiro = scp.shapiro(GRUPO_B).pvalue #0.8139519691467285
 print(p_value_B_shapiro)
-p_value_C_shapiro = scp.shapiro(GRUPO_C).pvalue #0.9636706709861755
+p_value_C_shapiro = scp.shapiro(GRUPO_C).pvalue #0.8139519691467285
 print(p_value_C_shapiro)
 
 print(teste_hipotese(p_value_A_shapiro)) #n reiejta
@@ -43,10 +43,14 @@ print(teste_hipotese(p_value_levene)) #reiejta
 
 #variancia é igual 
 
-# ttest,p_value_tteste = scp.ttest_ind(GRUPO_X, GRUPO_Y, equal_var=False) #0.9030937836205886
-# print(p_value_tteste)
-# print(teste_hipotese(p_value_tteste / 2)) # n rejeita
+F, p_value = scp.f_oneway(GRUPO_A,GRUPO_B,GRUPO_C)
+print("p value:%.6f" % p_value)
+if p_value <0.05:
+ print("Reject null hypothesis")
+else:
+ print("Fail to reject null hypothesis")
 
-#as medias sao diferentes
+
+#as medias sao iguais
 
 

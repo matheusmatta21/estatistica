@@ -8,16 +8,6 @@ import seaborn as sns
 import pandas as pd
 import math
 
-from array import array
-import numpy as np
-import statistics
-import matplotlib.pyplot as plt 
-import matplotlib.dates as mdates
-import scipy.stats as scp
-import seaborn as sns
-import pandas as pd
-import math
-
 GRUPO_X = np.array([150, 155, 160, 158, 152, 162])
 GRUPO_Y = np.array([145, 148, 150, 149, 151, 147])
 
@@ -43,6 +33,6 @@ ttest,p_value_tteste = scp.ttest_ind(GRUPO_X, GRUPO_Y, equal_var=False) #0.90309
 print(p_value_tteste)
 print(teste_hipotese(p_value_tteste / 2)) # n rejeita
 
-#as medias sao iguais
+#as medias sao diferentes
 
 

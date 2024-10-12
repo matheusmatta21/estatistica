@@ -37,18 +37,18 @@ print(teste_hipotese(p_value_C_shapiro)) #n rejeita
 
 #ambos tem distribuição normal
 
-test_stat_var, p_value_levene = scp.levene(GRUPO_A, GRUPO_B, GRUPO_C) #0.049332195639921764
+test_stat_var, p_value_levene = scp.levene(GRUPO_A, GRUPO_B, GRUPO_C) #0.9009095127015454
 print(p_value_levene)
-print(teste_hipotese(p_value_levene)) #reiejta
+print(teste_hipotese(p_value_levene)) #n reiejta
 
 #variancia é igual 
 
-F, p_value = scp.f_oneway(GRUPO_A,GRUPO_B,GRUPO_C)
+F, p_value = scp.f_oneway(GRUPO_A,GRUPO_B,GRUPO_C) #p value:0.091988
 print("p value:%.6f" % p_value)
 if p_value <0.05:
  print("Reject null hypothesis")
 else:
- print("Fail to reject null hypothesis")
+ print("Fail to reject null hypothesis") #n reiejta
 
 
 #as medias sao iguais
